@@ -13,11 +13,11 @@ Add this in your root `build.gradle` file (**not** your module `build.gradle` fi
 
 ```gradle
 allprojects {
-	repositories {
-		...
-		maven { url "https://jitpack.io" }
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
 	}
-}
 ```
 
 ## Dependency
@@ -26,9 +26,8 @@ Add this to your module's `build.gradle` file (make sure the version matches the
 
 ```gradle
 dependencies {
-	...
-	implementation 'com.github.GrenderG:Toasty:1.4.2'
-}
+	        implementation 'com.github.userzzz94:MyToast:Tag'
+	}
 ```
 
 ## Configuration

@@ -322,4 +322,58 @@ public class Toasty {
         return currentToast;
     }
 
+    public static class Config {
+        private Typeface typeface = Toasty.currentTypeface;
+        private int textSize = Toasty.textSize;
+
+        private boolean tintIcon = Toasty.tintIcon;
+        private boolean allowQueue = true;
+
+        private Config() {
+            // avoiding instantiation
+        }
+
+        @CheckResult
+        public static Config getInstance() {
+            return new Config();
+        }
+
+        public static void reset() {
+            Toasty.currentTypeface = LOADED_TOAST_TYPEFACE;
+            Toasty.textSize = 16;
+            Toasty.tintIcon = true;
+            Toasty.allowQueue = true;
+        }
+
+        @CheckResult
+        public Config setToastTypeface(@NonNull Typeface typeface) {
+            this.typeface = typeface;
+            return this;
+        }
+
+        @CheckResult
+        public Config setTextSize(int sizeInSp) {
+            this.textSize = sizeInSp;
+            return this;
+        }
+
+        @CheckResult
+        public Config tintIcon(boolean tintIcon) {
+            this.tintIcon = tintIcon;
+            return this;
+        }
+
+        @CheckResult
+        public Config allowQueue(boolean allowQueue) {
+            this.allowQueue = allowQueue;
+            return this;
+        }
+
+        public void apply() {
+            Toasty.currentTypeface = typeface;
+            Toasty.textSize = textSize;
+            Toasty.tintIcon = tintIcon;
+            Toasty.allowQueue = allowQueue;
+        }
+    }
 }
