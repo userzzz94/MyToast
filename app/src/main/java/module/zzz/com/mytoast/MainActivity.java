@@ -1,19 +1,13 @@
 package module.zzz.com.mytoast;
 
 import android.annotation.SuppressLint;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 
 import module.zzz.com.mytoasty.Toasty;
-
-import static android.graphics.Typeface.BOLD_ITALIC;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * NormalIconNull
      */
     private Button mBtnNormalIconNull;
+    /**
+     * Center
+     */
+    private Button mBtnCenter;
 
 
     @Override
@@ -64,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnNormal.setOnClickListener( this );
         mBtnNormalIconNull=(Button) findViewById( R.id.btnNormalIconNull );
         mBtnNormalIconNull.setOnClickListener( this );
-
+        mBtnCenter=(Button) findViewById( R.id.btnCenter );
+        mBtnCenter.setOnClickListener( this );
     }
 
     @SuppressLint("ResourceAsColor")
@@ -91,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnNormalIconNull:
                 Toasty.normal( MainActivity.this, "点击不带图片的normal" ).show();
+                break;
+            case R.id.btnCenter:
+                Drawable iconCenter =getResources().getDrawable( R.drawable.ic_pets_white_48dp );
+                Toasty.center( MainActivity.this, "点击不带图片的normal",iconCenter,1000,false ).show();
                 break;
         }
     }

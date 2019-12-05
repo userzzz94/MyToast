@@ -11,6 +11,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -321,6 +322,104 @@ public class Toasty {
 
         return currentToast;
     }
+
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @StringRes int message, Drawable icon,
+                               int duration, boolean withIcon) {
+        return center(context, context.getString(message), icon, -1, ToastyUtils.getColor(context, R.color.defaultTextColor),
+                duration, withIcon, false);
+    }
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @NonNull CharSequence message, Drawable icon,
+                               int duration, boolean withIcon) {
+        return center(context, message, icon, -1, ToastyUtils.getColor(context, R.color.defaultTextColor),
+                duration, withIcon, false);
+    }
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @StringRes int message, @DrawableRes int iconRes,
+                               @ColorRes int tintColorRes, int duration,
+                               boolean withIcon, boolean shouldTint) {
+        return center(context, context.getString(message), ToastyUtils.getDrawable(context, iconRes),
+                ToastyUtils.getColor(context, tintColorRes), ToastyUtils.getColor(context, R.color.defaultTextColor),
+                duration, withIcon, shouldTint);
+    }
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @NonNull CharSequence message, @DrawableRes int iconRes,
+                               @ColorRes int tintColorRes, int duration,
+                               boolean withIcon, boolean shouldTint) {
+        return center(context, message, ToastyUtils.getDrawable(context, iconRes),
+                ToastyUtils.getColor(context, tintColorRes), ToastyUtils.getColor(context, R.color.defaultTextColor),
+                duration, withIcon, shouldTint);
+    }
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @StringRes int message, Drawable icon,
+                               @ColorRes int tintColorRes, int duration,
+                               boolean withIcon, boolean shouldTint) {
+        return center(context, context.getString(message), icon, ToastyUtils.getColor(context, tintColorRes),
+                ToastyUtils.getColor(context, R.color.defaultTextColor), duration, withIcon, shouldTint);
+    }
+
+    @CheckResult
+    public static Toast center(@NonNull Context context, @StringRes int message, Drawable icon,
+                               @ColorRes int tintColorRes, @ColorRes int textColorRes, int duration,
+                               boolean withIcon, boolean shouldTint) {
+        return center(context, context.getString(message), icon, ToastyUtils.getColor(context, tintColorRes),
+                ToastyUtils.getColor(context, textColorRes), duration, withIcon, shouldTint);
+    }
+
+    /**
+     * 带图片的吐司，设置吐司弹出的位置为屏幕中心
+     * 通过参数传递，可是设置吐司的图片和文字内容
+     * @param message
+     */
+    public static Toast center(Context context,CharSequence message, Drawable icon, @ColorInt int tintColor,
+                               @ColorInt int textColor,int duration,boolean withIcon, boolean shouldTint) {
+        final Toast currentToast = Toast.makeText(context, "", duration);
+        final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.layout_toast_center, null);
+        final ImageView toastIcon = (ImageView) toastLayout.findViewById(R.id.toast_image);
+        final TextView toastTextView = (TextView) toastLayout.findViewById(R.id.toast_text);
+
+        Drawable drawableFrame;
+
+        if (shouldTint)
+            drawableFrame = ToastyUtils.tint9PatchDrawableFrame(context, tintColor);
+        else
+            drawableFrame = ToastyUtils.getDrawable(context, R.drawable.toast_frame);
+        ToastyUtils.setBackground(toastLayout, drawableFrame);
+
+        if (withIcon) {
+            if (icon == null)
+                throw new IllegalArgumentException("Avoid passing 'icon' as null if 'withIcon' is set to true");
+            ToastyUtils.setBackground(toastIcon, tintIcon ? ToastyUtils.tintIcon(icon, textColor) : icon);
+        } else {
+            toastIcon.setVisibility(View.GONE);
+        }
+
+        toastTextView.setText(message);
+        toastTextView.setTextColor(textColor);
+        toastTextView.setTypeface(currentTypeface);
+        toastTextView.setTextSize( TypedValue.COMPLEX_UNIT_SP, textSize);
+        
+        currentToast.setDuration(Toast.LENGTH_SHORT);
+        currentToast.setView(toastLayout);
+        currentToast.setGravity( Gravity.CENTER, 0, 0);
+        currentToast.show();
+        
+
+        if (!allowQueue){
+            if (lastToast != null)
+                lastToast.cancel();
+            lastToast = currentToast;
+        }
+        return currentToast;
+    }
+
 
     public static class Config {
         private Typeface typeface = Toasty.currentTypeface;
